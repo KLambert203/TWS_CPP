@@ -21,9 +21,24 @@
     <ClCompile Include="TempSensor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="TSL_ComPort.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TSL_File.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TempSensor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ITempSensorLink.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TSL_ComPort.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TSL_File.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

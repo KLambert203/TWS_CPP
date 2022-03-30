@@ -141,9 +141,14 @@
   <ItemGroup>
     <ClCompile Include="INJEC.cpp" />
     <ClCompile Include="TempSensor.cpp" />
+    <ClCompile Include="TSL_ComPort.cpp" />
+    <ClCompile Include="TSL_File.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ITempSensorLink.h" />
     <ClInclude Include="TempSensor.h" />
+    <ClInclude Include="TSL_ComPort.h" />
+    <ClInclude Include="TSL_File.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

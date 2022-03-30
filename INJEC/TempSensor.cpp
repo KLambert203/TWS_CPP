@@ -19,6 +19,13 @@
 // Public
 // //////////////////////////////////////////////////////////////////////////
 
+TempSensor::TempSensor() : mLink(NULL)
+{
+    mSum.mHumidity_pc = 0.0;
+    mSum.mTemp_C = 0.0;
+}
+
+
 TempSensor::TempSensor(const char* aComPortName)
 {
     assert(NULL != aComPortName);
@@ -62,12 +69,6 @@ TempSensor::TempSensor(const char* aComPortName)
 
 TempSensor::~TempSensor()
 {
-    assert(INVALID_HANDLE_VALUE != mComPort);
-
-    BOOL lRet = CloseHandle(mComPort);
-    assert(lRet);
-
-    (void)lRet;
 }
 
 // Cette fonction lit 3 octets du port COM. Le senseur transmet constament
@@ -81,30 +82,10 @@ TempSensor::~TempSensor()
 // donnees sont erronees.
 void TempSensor::GetData(double* aHumidity_pc, double* aTemp_C)
 {
-    assert(NULL != aHumidity_pc);
-    assert(NULL != aTemp_C);
-
-    // La temperature peut etre negative, il faud donc utiliser un type
-    // signe.
-    int8_t lRaw[3];
-    DWORD  lSize_byte;
-
-    if (!ReadFile(mComPort, lRaw, sizeof(lRaw), &lSize_byte, NULL))
-    {
-        throw std::exception("ReadFile( , , , ,  ) failed");
-    }
-
-    assert(sizeof(lRaw) == lSize_byte);
-
     Data lData;
+    mLink->GetData(&lData.mHumidity_pc, &lData.mTemp_C);
 
-    if      (SYNC == lRaw[0]) { lData.mHumidity_pc = lRaw[1]; lData.mTemp_C = lRaw[2]; }
-    else if (SYNC == lRaw[1]) { lData.mHumidity_pc = lRaw[2]; lData.mTemp_C = lRaw[0]; }
-    else if (SYNC == lRaw[2]) { lData.mHumidity_pc = lRaw[0]; lData.mTemp_C = lRaw[1]; }
-    else
-    {
-        throw std::exception("Corrupted data");
-    }
+
 
     mSum.mHumidity_pc += lData.mHumidity_pc;
     mSum.mTemp_C      += lData.mTemp_C;
@@ -123,4 +104,9 @@ void TempSensor::GetData(double* aHumidity_pc, double* aTemp_C)
 
     *aHumidity_pc = mSum.mHumidity_pc / lLen;
     *aTemp_C      = mSum.mTemp_C      / lLen;
+}
+
+void TempSensor::SetLink(ITempSensorLink* iTempSensorLink)
+{
+    mLink = iTempSensorLink;
 }

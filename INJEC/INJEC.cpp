@@ -14,6 +14,8 @@
 
 // ====== INJECT ============================================================
 #include "TempSensor.h"
+#include "TSL_ComPort.h"
+#include "TSL_File.h"
 
 // Static variable
 // //////////////////////////////////////////////////////////////////////////
@@ -50,9 +52,26 @@ int main(int aCount, const char ** aVector)
 
     std::cout << "INSTRUCTION  Press Ctrl-C to stop\n";
 
+    TSL_ComPort* lComPort = NULL;
+    TSL_File* lFile = NULL;
+
     try
     {
-        TempSensor lTS(aVector[1]);
+        ITempSensorLink* lLink;
+
+        if (0 == _strnicmp(aVector[1], "COM", 3))
+        {
+            lComPort = new TSL_ComPort(aVector[1]);
+            lLink = lComPort;
+        }
+        else
+        {
+            lFile = new TSL_File(aVector[1]);
+            lLink = lFile;
+        }
+
+        TempSensor lTS;
+        lTS.SetLink(lLink);
 
         while (!sStop)
         {

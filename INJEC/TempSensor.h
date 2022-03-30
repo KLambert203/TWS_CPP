@@ -13,7 +13,8 @@
 // ===== Windows ============================================================
 #include <Windows.h>
 // ===== INJECT =============================================================
-
+#include "TSL_ComPort.h"
+#include "TSL_File.h"
 // COMMENTAIRE PEDAGOGIQUE
 // La prochaine ligne est une "Forware declaration". Elle permet de declarer
 // une classe en avance sans fournir sa declaration complete. Cela permet
@@ -32,11 +33,12 @@ class TempSensor
 
 public:
 
-    TempSensor(const char* aComPortName);
+    TempSensor();
 
     ~TempSensor();
 
     void GetData(double* aHumidity_pc, double* aTemp_C);
+    void SetLink(ITempSensorLink* iTempSensorLink);
 
 private:
 
@@ -45,12 +47,13 @@ private:
         double mHumidity_pc;
         double mTemp_C;
     }
-    Data;
 
-    HANDLE mComPort;
+    Data;
 
     std::list<Data> mList;
 
     Data mSum;
+
+    ITempSensorLink* mLink;
 
 };

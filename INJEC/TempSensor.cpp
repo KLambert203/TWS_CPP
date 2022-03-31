@@ -10,6 +10,8 @@
 
 // ===== INJEC ==============================================================
 #include "TempSensor.h"
+#include "TSL_ComPort.h"
+#include "TSL_File.h"
 
 // Constants
 // //////////////////////////////////////////////////////////////////////////
@@ -23,48 +25,6 @@ TempSensor::TempSensor() : mLink(NULL)
 {
     mSum.mHumidity_pc = 0.0;
     mSum.mTemp_C = 0.0;
-}
-
-
-TempSensor::TempSensor(const char* aComPortName)
-{
-    assert(NULL != aComPortName);
-
-    mSum.mHumidity_pc = 0.0;
-    mSum.mTemp_C      = 0.0;
-
-    // Ouvrir le port COM
-    mComPort = CreateFile(aComPortName, GENERIC_READ, 0, NULL, OPEN_EXISTING, 0, NULL);
-    if (INVALID_HANDLE_VALUE == mComPort)
-    {
-        throw std::exception("CreateFile( , , , , , ,  ) failed");
-    }
-
-    // Obtenir la configuration actuel du port COM
-
-    DCB lDCB;
-
-    memset(&lDCB, 0, sizeof(lDCB));
-
-    lDCB.DCBlength = sizeof(lDCB);
-
-    if (!GetCommState(mComPort, &lDCB))
-    {
-        throw std::exception("GetCommState( ,  ) failed");
-    }
-
-    // Modifier le configuration du port COM
-
-    lDCB.fBinary = true;
-    lDCB.BaudRate = CBR_115200;
-    lDCB.ByteSize = 8;
-    lDCB.StopBits = ONESTOPBIT;
-    lDCB.fParity = NOPARITY;
-
-    if (!SetCommState(mComPort, &lDCB))
-    {
-        throw std::exception("SetCommState( ,  ) failed");
-    }
 }
 
 TempSensor::~TempSensor()
@@ -84,8 +44,6 @@ void TempSensor::GetData(double* aHumidity_pc, double* aTemp_C)
 {
     Data lData;
     mLink->GetData(&lData.mHumidity_pc, &lData.mTemp_C);
-
-
 
     mSum.mHumidity_pc += lData.mHumidity_pc;
     mSum.mTemp_C      += lData.mTemp_C;

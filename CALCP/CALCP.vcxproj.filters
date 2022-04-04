@@ -18,6 +18,9 @@
     <ClCompile Include="CALCL.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="StackCalculator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="StackCalculator.h">

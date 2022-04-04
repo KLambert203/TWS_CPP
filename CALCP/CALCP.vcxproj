@@ -140,6 +140,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="CALCL.cpp" />
+    <ClCompile Include="StackCalculator.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="StackCalculator.h" />
